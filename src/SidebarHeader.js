@@ -1,6 +1,8 @@
-import React, { Component } from 'react';
+import React, {
+    Component
+} from 'react';
 
-class Header extends Component {
+class SidebarHeader extends Component {
     state = {}
 
     toggleHide = () => {
@@ -20,11 +22,11 @@ class Header extends Component {
                         </svg>
                     </a>
                     <div className='title'>
-                        <h1>Neighborhood Map Palermo(React)</h1>
+                        <h1>Neighborhood Map Palermo</h1>
                     </div>
             </div>
         );
     }
 }
 
-export default Header
+export default SidebarHeader

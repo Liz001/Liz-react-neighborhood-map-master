@@ -1,9 +1,15 @@
 import React from 'react';
 
 const Search = (props) => {
-    const {locations, filteredLocations, selectedLocation, selectLocation, queryUpdate} = props;
-    let places = filteredLocations === [] ? locations : filteredLocations;
-    return (
+        const {
+            locations,
+            filteredLocations,
+            selectedLocation,
+            selectLocation,
+            queryUpdate
+        } = props;
+        let places = filteredLocations === [] ? locations : filteredLocations;
+        return (
         <div className='search-and-list'>
             <div>
                 <input type="text"

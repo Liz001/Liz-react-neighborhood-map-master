@@ -13,8 +13,10 @@ It's my final project of FEND Udacity.
 
 # How to run?
 
-1. Clone the repository and run:
+1. Clone the repository
 
-2. npm install
+2. Open the repository in command prompt
 
-3. npm start  (if your browser doesn't open automatically, navigate to http://localhost:3000)
+3. npm install
+
+4. npm start  (if your browser doesn't open automatically, navigate to http://localhost:3000)

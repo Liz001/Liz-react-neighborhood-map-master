@@ -1,7 +1,34 @@
-import React, { Component } from 'react';
-import * as FoursquareAPI from './FoursquareAPI';
+import React, {
+    Component
+} from 'react';
 
-class GoogleMaps extends Component {
+//Foursquare API
+const client_id = "UISD4REMOZSQ2J5NJAXNQFUXNNNN121QPQ5XVC1AGKWXMMVB";
+const client_secret = "4FEOXYFGY0F0ASIPCTOVAPBSIJ44OO5JOYQFJYRGSQ2RUI0P";
+
+
+export const getVenueDetails = (venue) =>
+    fetch('https://api.foursquare.com/v2/venues/' +
+        venue + '?client_id=' + client_id +
+        '&client_secret=' + client_secret +
+        '&v=20180407', {
+            headers: {}
+        })
+    .then(response => response.json())
+    .then(r => r)
+
+export const getVenueLists = (venue) =>
+    fetch('https://api.foursquare.com/v2/venues/' +
+        venue + '/listed?client_id=' + client_id +
+        '&client_secret=' + client_secret +
+        '&v=20180407', {
+            headers: {}
+        })
+    .then(response => response.json())
+    .then(r => r)
+
+//Google Maps
+class FoursquareGoogleMaps extends Component {
     state = {
         myMap: {},
         markers: [],
@@ -16,23 +43,31 @@ class GoogleMaps extends Component {
         let scriptElement = document.createElement('script');
         scriptElement.async = true;
         scriptElement.defer = true;
-        scriptElement.src = `https://maps.googleapis.com/maps/api/js?key=${this.props.myKey}&v=3&callback=initMap`;
+        scriptElement.src = 'https://maps.googleapis.com/maps/api/js?key=' + this.props.myKey + '&v=3&callback=initMap';
         bodyEl.appendChild(scriptElement);
         window.initMap = this.initMap;
     }
 
+
     // Initializes the map
     initMap = () => {
-        const mapWindow = new window.google.maps.Map(document.getElementById('map'), {
-            center: { lat: this.props.home.lat, lng: this.props.home.lng },
-            zoom: 10
+        const mapOpen = new window.google.maps.Map(document.getElementById('map'), {
+            center: {
+                lat: this.props.home.lat,
+                lng: this.props.home.lng
+            },
+            zoom: 14
         });
-//Creates info window
+        //Creates info window
         const infoWindow = new window.google.maps.InfoWindow({
             maxWidth: 170
         });
-        this.setState({infoWindow}, (() =>
-            this.setState({myMap: mapWindow}, ( () => {
+        this.setState({
+            infoWindow
+        }, (() =>
+            this.setState({
+                myMap: mapOpen
+            }, (() => {
                 //Initialize all markers
                 const locations = this.props.locations;
                 const theMap = this.state.myMap
@@ -52,7 +87,9 @@ class GoogleMaps extends Component {
                     return marker
                 })
                 theMap.fitBounds(bounds);
-                this.setState({markers});
+                this.setState({
+                    markers
+                });
             }))
         ))
     }
@@ -61,17 +98,17 @@ class GoogleMaps extends Component {
     isSelected = (marker) => {
         const selectedLoc = this.props.selectedLocation;
         const infoWindow = this.state.infoWindow;
-        if(marker.id === selectedLoc.id){
+        if (marker.id === selectedLoc.id) {
             this.populateInfoWindow(marker, infoWindow, this.state.myMap);
-            return window.google.maps.Animation.BOUNCE
+            return window.google.maps
         }
         return null
     };
 
-    //Make the API call to Foursquare and populates the info window with data
-    populateInfoWindow = (marker, infoWindow, theMap) =>{
+    //API Foursquare fill info window with data
+    populateInfoWindow = (marker, infoWindow, theMap) => {
         infoWindow.setContent('Loading...');
-        FoursquareAPI.getVenueDetails(marker.id)
+        getVenueDetails(marker.id)
             .then(venue => {
                 const vDetails = venue.response.venue
                 const infoContent = this.buildInfoWindowContent(vDetails);
@@ -79,7 +116,7 @@ class GoogleMaps extends Component {
                 infoWindow.open(theMap, marker);
             })
             .catch(err => {
-                infoWindow.setContent(`<div><span>There was an error loading this venue's info</span><p>Error: ${err}</p></div>`)
+                infoWindow.setContent(`<div><span>No venue's info</span><p>Error: ${err}</p></div>`)
                 infoWindow.open(theMap, marker);
             })
     };
@@ -90,28 +127,29 @@ class GoogleMaps extends Component {
         content += vDetails.name ? `<h3>${vDetails.name}</h3>` : '';
         content += vDetails.location.address ? `<h4>${vDetails.location.address}</h4>` : '';
         content += vDetails.categories[0].name ? `<h5>${vDetails.categories[0].name}</h5>` : '';
-return content;
+        return content;
     };
 
     render() {
-        const {filteredLocations} = this.props;
+        const {
+            filteredLocations
+        } = this.props;
         const markers = this.state.markers
         let filteredMarkers = markers.filter(mk => {
             mk.setMap(null);
             return filteredLocations.some(loc => loc.id === mk.id)
         })
 
-        return (
-            <div>
-                {
-                    filteredMarkers.forEach( mk => {
-                        mk.setAnimation(this.isSelected(mk));
-                        mk.setMap(this.state.myMap);
-                    })
-                }
-            </div>
+        return ( <
+            div > {
+                filteredMarkers.forEach(mk => {
+                    mk.setAnimation(this.isSelected(mk));
+                    mk.setMap(this.state.myMap);
+                })
+            } <
+            /div>
         );
     }
 }
 
-export default GoogleMaps
+export default FoursquareGoogleMaps
