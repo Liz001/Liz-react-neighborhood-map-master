@@ -43,6 +43,9 @@ class FoursquareGoogleMaps extends Component {
         let scriptElement = document.createElement('script');
         scriptElement.async = true;
         scriptElement.defer = true;
+        window.gm_authFailure = function() {
+           alert("google api is not responding");
+       };
         scriptElement.src = 'https://maps.googleapis.com/maps/api/js?key=' + this.props.myKey + '&v=3&callback=initMap';
         bodyEl.appendChild(scriptElement);
         window.initMap = this.initMap;
