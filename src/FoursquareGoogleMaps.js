@@ -100,7 +100,7 @@ class FoursquareGoogleMaps extends Component {
         const infoWindow = this.state.infoWindow;
         if (marker.id === selectedLoc.id) {
             this.populateInfoWindow(marker, infoWindow, this.state.myMap);
-            return window.google.maps
+            return window.google.maps.Animation.BOUNCE
         }
         return null
     };

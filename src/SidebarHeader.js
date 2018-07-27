@@ -15,13 +15,13 @@ class SidebarHeader extends Component {
 //Hamburger menu svg and title
     render() {
         return (
-            <div className='header'>
-                    <a className="burger" onClick={() => this.toggleHide()}>
+            <div className='header' aria-label="upper bar/header">
+                    <a className="burger" aria-label="burger menu" onClick={() => this.toggleHide()}>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                             <path d="M2 6h20v3H2zm0 5h20v3H2zm0 5h20v3H2z"/>
                         </svg>
                     </a>
-                    <div className='title'>
+                    <div className='title' aria-label="Project title">
                         <h1>Neighborhood Map Palermo</h1>
                     </div>
             </div>
